@@ -15,11 +15,14 @@ import { getMovies } from '../../services/api.service';
 import { Movie } from '../../models/movie';
 
 import { GENRES } from '../../consts';
+import {useSearchParams} from "react-router-dom";
 
 const MovieListPage = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const activeGenre = searchParams.get('genre') as string;
+
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [sortCriterion, setSortCriterion] = useState<'releaseDate' | 'title'>('releaseDate');
-    const [activeGenre, setActiveGenre] = useState<string>('all');
     const [movieList, setMovieList] = useState<Movie[]>([] as Movie[]);
     const [showDetailContainer, setShowDetailContainer] = useState<boolean>(false);
     const [selectedMovie, setSelectedMovie] = useState<Movie>({} as Movie);
@@ -46,7 +49,7 @@ const MovieListPage = () => {
     };
 
     const showGenreMovies = (selectedGenre: string): void => {
-        setActiveGenre(selectedGenre);
+        setSearchParams({genre: selectedGenre})
     };
     const openDetailInfo = (openMovieId: number): void => {
         const selectedMovie: Movie = movieList.filter((movie) => movie.id === openMovieId)[0];
